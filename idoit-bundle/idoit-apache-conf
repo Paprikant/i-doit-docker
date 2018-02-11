@@ -1,0 +1,14 @@
+<VirtualHost *:80>
+        ServerAdmin i-doit@example.net
+
+        DocumentRoot INSTALL_DIR/
+        <Directory INSTALL_DIR/>
+                # See INSTALL_DIR/.htaccess for details
+                AllowOverride All
+                Require all granted
+        </Directory>
+
+        LogLevel warn
+        ErrorLog APACHE_LOG_DIR/error.log
+        CustomLog APACHE_LOG_DIR/access.log combined
+</VirtualHost>
