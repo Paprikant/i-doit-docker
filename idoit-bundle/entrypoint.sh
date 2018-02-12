@@ -2,7 +2,7 @@
 
 echo "Starting mariadb..."
 /bin/sh -c 'mysqld --user mysql &'
-sleep 2
+sleep 5 
 
 # THis block runs only on first start
 if [ ! -f /initial ]; then
