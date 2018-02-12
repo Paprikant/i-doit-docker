@@ -3,7 +3,7 @@ FROM ubuntu:16.04
 MAINTAINER thereal.paprikant@gmail.com
 
 # Use this ARG to build diffrent versions
-ARG IDOIT_VERSION="open-1.10"
+ARG IDOIT_VERSION="open-1.9.2"
 
 ARG MARIADB_HOSTNAME="localhost"
 ARG APACHE_USER="www-data"
