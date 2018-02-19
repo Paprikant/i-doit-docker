@@ -1,11 +1,15 @@
 #!/bin/bash
 
 echo "Starting mariadb..."
-/bin/sh -c 'mysqld --user mysql &'
-sleep 5 
 
 # THis block runs only on first start
 if [ ! -f /initial ]; then
+  mysql_install_db
+
+  /bin/sh -c 'mysqld --user mysql &'
+
+  dockerize -wait unix:///var/run/mysqld/mysqld.sock
+
   echo "First start..."
   echo "Running i-doit setup. This can take a while..."
 
@@ -30,8 +34,10 @@ if [ ! -f /initial ]; then
 
   # Make sure bootstrapping happens only once
   touch /initial
+else
+  /bin/sh -c 'mysqld --user mysql &'
+  dockerize -wait unix:///var/run/mysqld/mysqld.sock
 fi
-
 echo "Starting webserver..."
 apache2ctl start
 
