@@ -1,12 +1,13 @@
 #!/bin/bash
 
 echo "Starting mariadb..."
+if [ ! -f /initial ]; then
+  mysql_install_db
+fi
+/bin/sh -c 'mysqld --user mysql &'
 
 # THis block runs only on first start
 if [ ! -f /initial ]; then
-  mysql_install_db
-
-  /bin/sh -c 'mysqld --user mysql &'
 
   dockerize -wait unix:///var/run/mysqld/mysqld.sock
 
@@ -14,10 +15,12 @@ if [ ! -f /initial ]; then
   echo "Running i-doit setup. This can take a while..."
 
   # Set mariadb superuser password
-  mysql -uroot -ppassword -e "USE mysql; FLUSH PRIVILEGES; GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '${MARIADB_SUPERUSER_PASSWORD}' WITH GRANT OPTION;"
+  mysql -uroot -ppassword -e "delete from mysql.user where Host='localhost' and User='root'; GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '${MARIADB_SUPERUSER_PASSWORD}' WITH GRANT OPTION;"
+  mysql -uroot -ppassword -e "FLUSH PRIVILEGES;"
 
   # Run i-doit setup
   cd $INSTALL_DIR/setup
+  chmod +x install.sh
   ./install.sh -n ${IDOIT_TENANT} -s "idoit_system" -m "idoit_data" -h localhost -p $MARIADB_SUPERUSER_PASSWORD -a $IDOIT_ADMINCENTER_PASSWORD -q
 
   # Create database user for i-doit

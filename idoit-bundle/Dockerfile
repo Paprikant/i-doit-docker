@@ -3,7 +3,7 @@ FROM ubuntu:16.04
 MAINTAINER thereal.paprikant@gmail.com
 
 # Use this ARG to build diffrent versions
-ARG IDOIT_VERSION="1.10"
+ARG IDOIT_VERSION="1.13"
 
 ARG MARIADB_HOSTNAME="localhost"
 ARG APACHE_USER="www-data"
@@ -82,4 +82,5 @@ RUN \
 
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT /entrypoint.sh
+#ENTRYPOINT /entrypoint.sh
+CMD /entrypoint.sh
